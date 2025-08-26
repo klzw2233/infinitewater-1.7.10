@@ -1,0 +1,14 @@
+[{
+  "modid": "infinitewater",
+  "name": "Infinite Water Block",
+  "description": "无限速率输出水的方块",
+  "version": "1.0",
+  "mcversion": "1.7.10",
+  "authorList": ["YourName"],
+  "credits": "",
+  "logoFile": "",
+  "url": "",
+  "updateUrl": "",
+  "screenshots": [],
+  "dependencies": []
+}]

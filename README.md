@@ -1,6 +1,8 @@
+[English](READMEen.md) | [中文](README.md)
+
 # 🌊 无限水方块 Mod (Forge 1.7.10)
 
-一个为 Minecraft Forge 1.7.10 开发的示例 Mod，添加了一个**无限水方块**。  
+一个为 Minecraft Forge 1.7.10 开发的示例 Mod，添加了一个**无限水方块**。
 该方块会持续向周围的流体容器注入水（无延迟、无限速率），可用石镐及以上的工具挖掘并掉落自身。
 
 -----

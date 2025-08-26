@@ -1,3 +1,5 @@
+[English](READMEen.md) | [中文](README.md)
+
 # 🌊Infinite Water Block Mod (Forge 1.7.10)
 
 An example Mod developed for Minecraft Forge 1.7.10 that adds an Infinite Water Block.

@@ -1,4 +1,4 @@
-package com.example.infinitewater;
+package com.klzw2233.infinitewater;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;

@@ -1,4 +1,4 @@
-package com.example.infinitewater;
+package com.klzw2233.infinitewater;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

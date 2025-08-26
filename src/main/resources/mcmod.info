@@ -1,21 +1,16 @@
-{
-	"modListVersion": 2,
-	"modList": [{
-		"modid": "${infinitewater}",
-		"name": "${Infinite Water Block}",
-		"description": "无限速率输出水的方块",
-		"version": "${modVersion}",
-		"mcversion": "${minecraftVersion}",
-		"url": "https://github.com/klzw2233/infinitewater-1.7.10",
-		"updateUrl": "",
-		"authorList": ["klzw2233"],
-		"credits": "",
-		"logoFile": "",
-		"screenshots": [],
-		"parent": "",
-		"requiredMods": [],
-		"dependencies": [],
-		"dependants": [],
-		"useDependencyInformation": false
-	}]
-}
+[
+  {
+    "modid": "examplemod",
+    "name": "示例模组",
+    "description": "这是一个用于演示的 Minecraft Forge 1.7.10 模组。",
+    "version": "1.0.0",
+    "mcversion": "1.7.10",
+    "url": "https://example.com",
+    "updateUrl": "",
+    "authorList": ["你的名字"],
+    "credits": "感谢 Forge 团队提供支持",
+    "logoFile": "assets/examplemod/logo.png",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

@@ -24,7 +24,7 @@ public class CommonProxy {
      * 在此阶段，通常进行配置读取、方块和物品的创建。
      * @param event 预初始化事件对象。
      */
-    @Mod.EventHandler
+    //@Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
         // 注：原始代码中的 Config 和 Tags 变量未提供，此处保留了原始调用结构。
@@ -39,7 +39,7 @@ public class CommonProxy {
      * 在此阶段，进行模组的实际设置，如注册方块、方块实体和合成配方。
      * @param event 初始化事件对象。
      */
-    @Mod.EventHandler
+    //@Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
         // 创建并注册无限水源方块
@@ -59,7 +59,7 @@ public class CommonProxy {
      * 在此阶段，主要处理与其他模组的交互。
      * @param event 后初始化事件对象。
      */
-    @Mod.EventHandler
+    //@Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 
     }
@@ -69,7 +69,7 @@ public class CommonProxy {
      * 在此阶段，可以注册服务器命令。
      * @param event 服务器启动事件对象。
      */
-    @Mod.EventHandler
+    //@Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
 
     }

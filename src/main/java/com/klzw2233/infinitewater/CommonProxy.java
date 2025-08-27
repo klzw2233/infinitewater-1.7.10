@@ -9,7 +9,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 
-//import static com.klzw2233.infinitewater.InfiniteWaterMod.proxy;
 
 /**
  * 这是一个通用的代理类，用于处理服务器端和客户端共享的事件。
@@ -33,7 +32,6 @@ public class CommonProxy {
         InfiniteWaterMod.LOG.info(Config.greeting);
         InfiniteWaterMod.LOG.info("loading mod "+ InfiniteWaterMod.MODName + "-" + Tags.VERSION);
 
-        //proxy.preInit(event);
     }
 
     /**
@@ -51,7 +49,6 @@ public class CommonProxy {
         // 注册 TileEntity
         GameRegistry.registerTileEntity(TileInfiniteWater.class, InfiniteWaterMod.TILE_NAME);
 
-        //proxy.init(event); 主类中用这个调用代理侧类的init方法
     }
 
     /**
@@ -62,7 +59,6 @@ public class CommonProxy {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 
-        //proxy.postInit(event);
     }
 
     /**
@@ -73,6 +69,5 @@ public class CommonProxy {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
 
-        //proxy.serverStarting(event);
     }
 }

@@ -19,7 +19,7 @@
 ## 📸 游戏内效果
 
 > 下图为示意图，展示了方块在世界中的外观（已使用蓝色水纹占位贴图）：
-
+![无限水方块](src/main/resources/assets/infinitewater/textures/blocks/infinite_water.png)
 -----
 
 ## 📂 工程结构
@@ -52,7 +52,7 @@ src/main/resources/
 1.  克隆仓库到本地：
 
     ```bash
-    git clone https://github.com/<你的用户名>/infinitewater-1.7.10.git
+    git clone https://github.com/klzw2233/infinitewater-1.7.10.git
     ```
 
 2.  导入到 Forge 1.7.10 MDK 工程中，或将 `src/` 内容放入现有 MDK 的 `src/` 目录。
@@ -116,3 +116,4 @@ src/main/resources/
 
 * Minecraft Forge 团队
 * Minecraft 社区开发者
+* GregtechNewHorizons 开发团队

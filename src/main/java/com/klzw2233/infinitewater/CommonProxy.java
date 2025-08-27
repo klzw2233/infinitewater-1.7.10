@@ -49,6 +49,9 @@ public class CommonProxy {
         // 注册 TileEntity
         GameRegistry.registerTileEntity(TileInfiniteWater.class, InfiniteWaterMod.TILE_NAME);
 
+        // 在这里注册配方
+        Recipes.registerRecipes();
+
     }
 
     /**

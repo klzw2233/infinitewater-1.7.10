@@ -1,7 +1,10 @@
 package com.klzw2233.infinitewater;
 
 import com.klzw2233.InfiniteWaterMod.Tags;
-import net.minecraft.block.Block;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,14 +31,31 @@ public class InfiniteWaterMod {
     public static final String TILE_NAME = "tile_infinite_water";
 
 
-    /** 无限水源方块的静态实例。*/
-    public static Block infiniteWaterBlock;
-
     /** * 侧代理模式（SidedProxy）的实例，用于区分客户端和服务器端的逻辑。
      * @SidedProxy 注解指定了客户端和服务器端的代理类。
      */
     @SidedProxy(clientSide = "com.klzw2233.infinitewater.ClientProxy", serverSide = "com.klzw2233.infinitewater.CommonProxy")
     //这行代码本身就是为了让 Forge 框架能够找到并初始化你的代理实例，从而将你的模组逻辑正确地分配给客户端或服务器环境。
     public static CommonProxy proxy;
+
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        proxy.preInit(event); //调用代理类中的对应方法
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+        proxy.init(event);
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        proxy.postInit(event);
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        proxy.serverStarting(event);
+    }
 
 }

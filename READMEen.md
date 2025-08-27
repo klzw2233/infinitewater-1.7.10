@@ -20,7 +20,7 @@ This block continuously injects water into surrounding fluid containers (with no
 ## 📸 In-Game Effect
 
 > The image below is for illustration purposes, showing the block's appearance in the world (a blue water-pattern placeholder texture has been used):
-
+![infiniteWaterBlock](src/main/resources/assets/infinitewater/textures/blocks/infinite_water.png)
 -----
 
 ## 📂 Project Structure
@@ -53,7 +53,7 @@ src/main/resources/
 1.  Clone the repository locally:
 
     ```bash
-    git clone https://github.com/<你的用户名>/infinitewater-1.7.10.git
+    git clone https://github.com/klzw2233/infinitewater-1.7.10.git
     ```
 
 2.  Import into a Forge 1.7.10 MDK project, or place the contents of `src/` into the `src/` directory of an existing MDK.
@@ -117,3 +117,4 @@ This example project uses the MIT License. You are free to use, modify, and dist
 
 * The Minecraft Forge Team
 * The Minecraft Community Developers
+* The GregtechNewHorizons Development Team

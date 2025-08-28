@@ -22,7 +22,7 @@ public class Recipes {
             "IWI",
             "III",
             'I', Items.iron_ingot,
-            'W', Items.water_bucket
+            'W', Items.cauldron
         );
 
     }

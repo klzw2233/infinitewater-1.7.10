@@ -9,7 +9,7 @@ public class ModConstants {
     /** Mod 基本信息 */
     public static final String MODID   = "infinitewater";      // 注册用 ID
     public static final String NAME    = "Infinite Water Block";     // 模组显示名称
-    public static final String VERSION = "1.0.0"+"-"+ Tags.VERSION;    // 版本号 + git提交号
+    public static final String VERSION = "1.3"+"-"+ Tags.VERSION;    // 版本号 + git提交号
 
     //代理路径
     public static final String CLIENT_PROXY = "com.klzw2233.infinitewater.proxy.ClientProxy";

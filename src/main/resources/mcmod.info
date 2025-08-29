@@ -3,7 +3,7 @@
 	"modList": [{
 		"modid": "${modId}",
 		"name": "${modName}",
-		"description": "无限速率输出水的方块",
+		"description": "Infinite Water Block",
 		"version": "${modVersion}",
 		"mcversion": "${minecraftVersion}",
 		"url": "https://github.com/klzw2233/infinitewater-1.7.10",

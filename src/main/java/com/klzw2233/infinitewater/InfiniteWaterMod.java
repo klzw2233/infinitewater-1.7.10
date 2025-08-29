@@ -34,7 +34,7 @@ public class InfiniteWaterMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ModLogger.info("=== {} v{} PreInit 阶段开始 === "+ModConstants.NAME+" "+ModConstants.VERSION);
+        ModLogger.info("=== PreInit stage begin === "+ModConstants.NAME+" "+ModConstants.VERSION);
 
         // 加载配置
         ModConfig.load(event.getSuggestedConfigurationFile());
@@ -48,26 +48,26 @@ public class InfiniteWaterMod {
         // 调用代理
         proxy.preInit(event);
 
-        ModLogger.info("=== PreInit 阶段完成 ===");
+        ModLogger.info("=== PreInit stage finish ===");
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        ModLogger.info("=== Init 阶段开始 ===");
+        ModLogger.info("=== Init stage begin ===");
         proxy.init(event);
-        ModLogger.info("=== Init 阶段完成 ===");
+        ModLogger.info("=== Init stage finish ===");
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        ModLogger.info("=== PostInit 阶段开始 ===");
+        ModLogger.info("=== PostInit stage begin ===");
         proxy.postInit(event);
-        ModLogger.info("=== PostInit 阶段完成 ===");
+        ModLogger.info("=== PostInit stage finish ===");
     }
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-        ModLogger.info("=== 服务器启动阶段 ===");
+        ModLogger.info("=== Server startup phase ===");
         proxy.serverStarting(event);
     }
 }

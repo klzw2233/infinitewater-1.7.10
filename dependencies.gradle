@@ -34,5 +34,7 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    //runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.69-GTNH:dev")
+    //Github上的仓库作为依赖项，无需手动下载dev.jar到本地的libs目录下
+    //runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.77-GTNH:dev")
+    //runtimeOnlyNonPublishable("com.github.GTNewHorizons:CodeChickenCore:1.4.7:dev")
 }

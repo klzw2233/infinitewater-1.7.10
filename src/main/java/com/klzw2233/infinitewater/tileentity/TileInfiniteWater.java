@@ -1,14 +1,18 @@
-package com.klzw2233.infinitewater;
+package com.klzw2233.infinitewater.tileentity;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
 /**
- * 这是一个无限水源的 TileEntity。
- * 它能持续向相邻的方块提供无限的水源。
+ * 无限水源 TileEntity
+ * - 能持续向相邻方块提供无限水
+ * - 继承 TileBase，具备 NBT 存储/同步能力
  */
-public class TileInfiniteWater extends TileEntity implements IFluidHandler {
+public class TileInfiniteWater extends TileBase implements IFluidHandler {
+
+    public static final String name = "tile_infinite_water";
 
     /**
      * 定义一个静态常量，表示无限的水。
@@ -119,5 +123,17 @@ public class TileInfiniteWater extends TileEntity implements IFluidHandler {
             // 返回一个 FluidTankInfo 对象，表示这是一个无限容量的水箱。
             new FluidTankInfo(INFINITE_WATER, Integer.MAX_VALUE)
         };
+    }
+
+    // ===== 覆盖 TileBase 的自定义 NBT 存取 =====
+
+    @Override
+    protected void writeCustomNBT(NBTTagCompound tag) {
+        // 当前类没有额外字段可保存
+    }
+
+    @Override
+    protected void readCustomNBT(NBTTagCompound tag) {
+        // 当前类没有额外字段需要读取
     }
 }

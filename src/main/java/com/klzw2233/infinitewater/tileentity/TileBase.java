@@ -43,7 +43,6 @@ public class TileBase extends TileEntity {
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        writeCustomNBT(tag);
     }
 
     /**
@@ -52,7 +51,6 @@ public class TileBase extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        readCustomNBT(tag);
     }
 
     /**

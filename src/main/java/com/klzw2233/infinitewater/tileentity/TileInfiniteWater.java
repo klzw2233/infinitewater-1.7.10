@@ -2,6 +2,7 @@ package com.klzw2233.infinitewater.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
@@ -128,12 +129,12 @@ public class TileInfiniteWater extends TileBase implements IFluidHandler {
     // ===== 覆盖 TileBase 的自定义 NBT 存取 =====
 
     @Override
-    protected void writeCustomNBT(NBTTagCompound tag) {
+    public void writeCustomNBT(NBTTagCompound tag) {
         // 当前类没有额外字段可保存
     }
 
     @Override
-    protected void readCustomNBT(NBTTagCompound tag) {
+    public void readCustomNBT(NBTTagCompound tag) {
         // 当前类没有额外字段需要读取
     }
 }

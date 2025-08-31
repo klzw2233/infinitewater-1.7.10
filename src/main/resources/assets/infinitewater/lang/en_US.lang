@@ -1,5 +1,6 @@
 #Block
-tile.infinitewater.block_infinite_water.name=无限水方块
+tile.infinitewater.block_infinite_water.name=Infinite Water Block
+tile.infinitewater.block_infinite_fluid.name=Infinite Fluid Block
 
 #CreativeTabs
 itemGroup.infinitewater=InfiniteWaterBlock

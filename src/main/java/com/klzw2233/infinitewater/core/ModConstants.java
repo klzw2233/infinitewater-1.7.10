@@ -11,6 +11,8 @@ public class ModConstants {
     public static final String NAME    = "Infinite Water Block";     // 模组显示名称
     public static final String VERSION = "1.3"+"-"+ Tags.VERSION;    // 版本号 + git提交号
 
+    public static final int[] rateList = {65536, 262144, 1048576, 4194304, 16777216}; // 速率表
+
     //代理路径
     public static final String CLIENT_PROXY = "com.klzw2233.infinitewater.proxy.ClientProxy";
     public static final String COMMON_PROXY = "com.klzw2233.infinitewater.proxy.CommonProxy";

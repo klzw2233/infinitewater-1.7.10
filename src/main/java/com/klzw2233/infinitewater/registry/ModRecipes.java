@@ -10,15 +10,15 @@ import net.minecraft.item.ItemStack;
 public class ModRecipes {
 
     public static void register() {
-        ModLogger.info("=== 开始注册配方 ===");
+        ModLogger.info("=== [Start] Registering recipe ===");
 
         if (ModConfig.enableInfiniteWater) {
             registerInfiniteWaterRecipe();
         } else {
-            ModLogger.warn("[跳过] 无限水方块已被配置文件禁用");
+            ModLogger.warn("[Skipped] Infinite Water Block has been disabled in the configuration file");
         }
 
-        ModLogger.info("=== 配方注册结束 ===");
+        ModLogger.info("=== [Completed] Recipe registration completed ===");
     }
 
     private static void registerInfiniteWaterRecipe() {
@@ -33,10 +33,10 @@ public class ModRecipes {
                     'W', Items.cauldron,
                     'I', refinedIron
                 );
-                ModLogger.info("[成功] 无限水方块配方 (IC2 精炼铁)");
+                ModLogger.info("[Success] Infinite Water Block recipe (IC2 Refined Iron)");
                 return;
             } else {
-                ModLogger.warn("[警告] 检测到 IC2 但找不到 refinedIronIngot，使用默认配方");
+                ModLogger.warn("[Warning] IC2 detected, but the item refinedIronIngot was not found. Default recipe has been applied");
             }
         }
 
@@ -48,6 +48,16 @@ public class ModRecipes {
             'W', Items.cauldron,
             'I', Items.iron_ingot
         );
-        ModLogger.info("[成功] 无限水方块配方 (默认铁锭炼药锅)");
+        ModLogger.info("[Success] Infinite Water Block recipe (Default Iron, Ingot Cauldron)");
+
+        // 默认配方 无限液体方块
+        GameRegistry.addRecipe(new ItemStack(ModBlocks.infiniteFluid),
+            "III",
+            "IWI",
+            "III",
+            'W', Items.cauldron,
+            'I', Items.iron_ingot
+        );
+        ModLogger.info("[Success] Infinite Fluid Block recipe (Default Iron, Ingot Cauldron)");
     }
 }

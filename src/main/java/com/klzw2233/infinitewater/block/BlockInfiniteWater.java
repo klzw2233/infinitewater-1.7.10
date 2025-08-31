@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 /**
  * 这是一个无限水源方块。
- * 它继承自 BlockContainer，用于容纳一个 TileEntity（方块实体）。
+ * 它继承自 BlockBase，用于容纳一个 TileEntity（方块实体）。
  */
 public class BlockInfiniteWater extends BlockBase {//改自BlockContainer
 
@@ -52,11 +52,13 @@ public class BlockInfiniteWater extends BlockBase {//改自BlockContainer
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        TileEntity te = world.getTileEntity(x, y, z);
-        if (te instanceof TileInfiniteWater) {
-            ((TileInfiniteWater) te).onBlockBroken(); // 预留给 TileEntity 清理用
+        if (!world.isRemote) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if (te instanceof TileInfiniteWater) {
+                ((TileInfiniteWater) te).onBlockBroken(); // 预留给 TileEntity 清理用
+            }
+            super.breakBlock(world, x, y, z, block, meta);
+            world.removeTileEntity(x, y, z);
         }
-        super.breakBlock(world, x, y, z, block, meta);
-        world.removeTileEntity(x, y, z);
     }
 }

@@ -11,7 +11,7 @@ import com.klzw2233.infinitewater.core.ModConstants;
  * BlockBase类，是所有含有方块实体的方块类的基类，不会自动生成对应的方块实体
  * 避免使用BlockContainer 使用非普通方块渲染
 */
-public abstract class BlockBase extends Block {
+public class BlockBase extends Block {
 
     public BlockBase(Material material, String name) {
         super(material);
@@ -35,11 +35,13 @@ public abstract class BlockBase extends Block {
     /** 拆方块时调用 Tile 清理逻辑 */
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        TileEntity te = world.getTileEntity(x, y, z);
-        if (te instanceof TileBase) {
-            ((TileBase) te).onBlockBroken();
+        if (!world.isRemote) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if (te instanceof TileBase) {
+                ((TileBase) te).onBlockBroken();
+            }
+            super.breakBlock(world, x, y, z, block, meta);
+            world.removeTileEntity(x, y, z);
         }
-        super.breakBlock(world, x, y, z, block, meta);
-        world.removeTileEntity(x, y, z);
     }
 }

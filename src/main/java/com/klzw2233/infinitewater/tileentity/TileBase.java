@@ -13,15 +13,20 @@ import net.minecraft.tileentity.TileEntity;
  * - 红石状态检测
  * - 拆方块钩子
  */
-public abstract class TileBase extends TileEntity {
+public class TileBase extends TileEntity {
 
 
     /**
-     * 方块被破坏时调用
+     * 自定义方法，需要你自己在 breakBlock 里手动调用
+     * 处理 TileEntity 内部的清理逻辑，比如：
+     * 保存数据到掉落物 NBT
+     * 断开与其他 TileEntity 的连接
+     * 停止定时任务、释放资源
      * 子类可覆盖以实现掉落物、保存数据等逻辑
      */
     public void onBlockBroken() {
         // 默认无操作
+        markDirty();
     }
 
     /**
@@ -51,14 +56,14 @@ public abstract class TileBase extends TileEntity {
     }
 
     /**
-     * 子类必须实现：写入自定义 NBT 数据
+     * 子类实现：写入自定义 NBT 数据
      */
-    protected abstract void writeCustomNBT(NBTTagCompound tag);
+    public void writeCustomNBT(NBTTagCompound tag){};
 
     /**
-     * 子类必须实现：读取自定义 NBT 数据
+     * 子类实现：读取自定义 NBT 数据
      */
-    protected abstract void readCustomNBT(NBTTagCompound tag);
+    public void readCustomNBT(NBTTagCompound tag){};
 
     /**
      * 同步到客户端的数据包

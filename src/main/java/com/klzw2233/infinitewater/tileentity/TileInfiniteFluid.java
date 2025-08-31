@@ -2,29 +2,27 @@ package com.klzw2233.infinitewater.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
+import com.klzw2233.infinitewater.core.ModConstants;
 
 /**
- * 无限水源 TileEntity
- * - 能持续向相邻方块提供无限水
- * - 继承 TileBase，具备 NBT 存储/同步能力
- */
-public class TileInfiniteWater extends TileBase implements IFluidHandler {
+ * 无限液体输出，可配置的
+ * 通过手持装有液体的容器右键方块设置输出种类
+ * 空手右键方块输出信息（液体种类 输出速率）
+ * 向六个面的容器或者管道输出无限液体
+*/
+public class TileInfiniteFluid extends TileBase implements IFluidHandler{
 
-    public static final String name = "tile_infinite_water";
+    public static final String name = "tile_infinite_fluid";
+    private Fluid outputFluid = FluidRegistry.WATER; // default water
+    private int outputRate = ModConstants.rateList[0]; // mB/t
 
-    /**
-     * 定义一个静态常量，表示无限的水。
-     * FluidStack 包含了流体类型（FluidRegistry.WATER）和流体量（Integer.MAX_VALUE）。
-     */
-    private static final FluidStack INFINITE_WATER =
-        new FluidStack(FluidRegistry.WATER, Integer.MAX_VALUE);
+    public FluidStack Infinite_Fluid = new FluidStack(outputFluid, outputRate);
 
     /**
      * 每刻（tick）都会调用的更新方法。
-     * 用于向相邻方块填充水。
+     * 用于向相邻方块填充液体。
      */
     @Override
     public void updateEntity() {
@@ -45,7 +43,7 @@ public class TileInfiniteWater extends TileBase implements IFluidHandler {
                 // 如果是，则向该方块填充无限的水。
                 // dir.getOpposite() 表示从该相邻方块的方向看向本方块。
                 // true 表示执行实际的填充操作。
-                ((IFluidHandler) te).fill(dir.getOpposite(), INFINITE_WATER, true);
+                ((IFluidHandler) te).fill(dir.getOpposite(), Infinite_Fluid, true);
             }
         }
     }
@@ -72,10 +70,10 @@ public class TileInfiniteWater extends TileBase implements IFluidHandler {
      */
     @Override
     public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-        // 如果请求的流体为空或者不是水，则返回 null。
-        if (resource == null || resource.getFluid() != FluidRegistry.WATER) return null;
-        // 否则，返回一个包含请求流体量的水流体栈。
-        return new FluidStack(FluidRegistry.WATER, resource.amount);
+        // 如果请求的流体为空或者不是outputFluid，则返回 null。
+        if (resource == null || resource.getFluid() != outputFluid) return null;
+        // 否则，返回一个包含请求流体量的outputFluid流体栈。
+        return new FluidStack(outputFluid, resource.amount);
     }
 
     /**
@@ -87,7 +85,7 @@ public class TileInfiniteWater extends TileBase implements IFluidHandler {
      */
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-        return new FluidStack(FluidRegistry.WATER, maxDrain);
+        return new FluidStack(outputFluid, maxDrain);
     }
 
     /**
@@ -109,32 +107,81 @@ public class TileInfiniteWater extends TileBase implements IFluidHandler {
      */
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return fluid == FluidRegistry.WATER;
+        return fluid == outputFluid;
     }
 
     /**
      * 获取流体箱（tank）信息。
      * 告诉其他方块这个方块的流体存储能力。
      * @param from 检查流体信息的方向。
-     * @return 返回一个 FluidTankInfo 数组，表示这个方块有一个无限容量的水箱。
+     * @return 返回一个 FluidTankInfo 数组，表示这个方块有一个指定容量的液体箱。
      */
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
         return new FluidTankInfo[] {
-            // 返回一个 FluidTankInfo 对象，表示这是一个无限容量的水箱。
-            new FluidTankInfo(INFINITE_WATER, Integer.MAX_VALUE)
+            // 返回一个 FluidTankInfo 对象，表示这是一个指定容量的液体箱。
+            new FluidTankInfo(Infinite_Fluid, outputRate)
         };
     }
 
-    // ===== 覆盖 TileBase 的自定义 NBT 存取 =====
 
     @Override
-    public void writeCustomNBT(NBTTagCompound tag) {
-        // 当前类没有额外字段可保存
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        tag.setString("OutputFluid", outputFluid.getName());
+        tag.setInteger("OutputRate", outputRate);
     }
 
     @Override
-    public void readCustomNBT(NBTTagCompound tag) {
-        // 当前类没有额外字段需要读取
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        if (tag.hasKey("OutputFluid")) {
+            Fluid f = FluidRegistry.getFluid(tag.getString("OutputFluid"));
+            if (f != null){
+                outputFluid = f;
+            }
+        }
+        if (tag.hasKey("OutputRate")) {
+            outputRate = tag.getInteger("OutputRate");
+        }
     }
+
+    /**
+     * set output fluid type
+    */
+    public void setOutputFluid(Fluid fluid){
+        outputFluid = fluid;
+    }
+
+    /**
+     * get output rate
+    */
+    public int getOutputRate(){
+        return outputRate;
+    }
+
+    /**
+     * 玩家蹲下空手右键方块以循环设置输出速率
+     * 输出速率数组存在常量类中
+     * */
+    public void cycleOutputRate() {
+        int idx = 0;
+        for (int i = 0; i < ModConstants.rateList.length; i++) {
+            if (ModConstants.rateList[i] == outputRate) {
+                idx = i;
+                break;
+            }
+        }
+        outputRate = ModConstants.rateList[(idx + 1) % ModConstants.rateList.length];
+        markDirty(); // 通知保存
+    }
+
+    public void writeCustomNBT(NBTTagCompound nbt) {
+        this.writeToNBT(nbt);
+    }
+
+    public void readCustomNBT(NBTTagCompound nbt) {
+        this.readFromNBT(nbt);
+    }
+
 }

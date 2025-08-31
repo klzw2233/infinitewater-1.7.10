@@ -53,7 +53,9 @@ public class BlockInfiniteFluid extends BlockBase {
             if (te instanceof TileInfiniteFluid) {
                 TileInfiniteFluid tile = (TileInfiniteFluid) te;
                 ItemStack held = player.getCurrentEquippedItem();
+
                 if (held != null) {
+                    // 手里有物品，尝试设置输出流体
                     FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(held);
                     if (fs != null) {
                         tile.setOutputFluid(fs.getFluid());
@@ -62,18 +64,29 @@ public class BlockInfiniteFluid extends BlockBase {
                         ));
                         return true;
                     }
-                } else if (player.isSneaking()){
-                    tile.cycleOutputRate();
-                    player.addChatMessage(new ChatComponentText(
-                        "Output rate: " + tile.getOutputRate() + " mB/t"
-                    ));
-                    return true;
-                    // return false; // 让 Minecraft 继续处理其他交互，比如打开GUI
+                } else {
+                    // 空手
+                    if (player.isSneaking()) {
+                        // 潜行空手：循环切换输出速率
+                        tile.cycleOutputRate();
+                        player.addChatMessage(new ChatComponentText(
+                            "Output rate: " + tile.getOutputRate() + " mB/t"
+                        ));
+                        return true;
+                    } else {
+                        // 普通空手：显示当前流体类型和速率
+                        player.addChatMessage(new ChatComponentText(
+                            "Fluid: " + tile.getOutputFluid().getLocalizedName(new FluidStack(tile.getOutputFluid(), 1))
+                                + " | Rate: " + tile.getOutputRate() + " mB/t"
+                        ));
+                        return true;
+                    }
                 }
             }
         }
         return true;
     }
+
 
 
     @Override

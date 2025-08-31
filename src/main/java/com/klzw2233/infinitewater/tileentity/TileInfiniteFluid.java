@@ -120,7 +120,7 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
         return new FluidTankInfo[] {
             // 返回一个 FluidTankInfo 对象，表示这是一个指定容量的液体箱。
-            new FluidTankInfo(Infinite_Fluid, outputRate)
+            new FluidTankInfo(Infinite_Fluid, Integer.MAX_VALUE)
         };
     }
 
@@ -144,13 +144,18 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
         if (tag.hasKey("OutputRate")) {
             outputRate = tag.getInteger("OutputRate");
         }
+
+        Infinite_Fluid = new FluidStack(outputFluid, outputRate); // 同步更新
     }
 
     /**
      * set output fluid type
     */
     public void setOutputFluid(Fluid fluid){
+
         outputFluid = fluid;
+
+        Infinite_Fluid = new FluidStack(outputFluid, outputRate); // 同步更新
     }
 
     /**
@@ -159,6 +164,8 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
     public int getOutputRate(){
         return outputRate;
     }
+
+    public Fluid getOutputFluid(){ return outputFluid; }
 
     /**
      * 玩家蹲下空手右键方块以循环设置输出速率
@@ -173,6 +180,7 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
             }
         }
         outputRate = ModConstants.rateList[(idx + 1) % ModConstants.rateList.length];
+        Infinite_Fluid = new FluidStack(outputFluid, outputRate); // 同步更新
         markDirty(); // 通知保存
     }
 

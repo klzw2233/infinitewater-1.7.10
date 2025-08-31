@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 /**
  * 这是一个无限水源方块。
- * 它继承自 BlockContainer，用于容纳一个 TileEntity（方块实体）。
+ * 它继承自 BlockBase，用于容纳一个 TileEntity（方块实体）。
  */
 public class BlockInfiniteWater extends BlockBase {//改自BlockContainer
 

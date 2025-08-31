@@ -7,6 +7,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import com.klzw2233.infinitewater.core.ModConstants;
 
+/**
+ * BlockBase类，是所有含有方块实体的方块类的基类，不会自动生成对应的方块实体
+ * 避免使用BlockContainer 使用非普通方块渲染
+*/
 public abstract class BlockBase extends Block {
 
     public BlockBase(Material material, String name) {

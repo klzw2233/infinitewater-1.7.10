@@ -40,7 +40,7 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
 
             // 检查相邻的方块实体是否实现了 IFluidHandler 接口。
             if (te instanceof IFluidHandler) {
-                // 如果是，则向该方块填充无限的水。
+                // 如果是，则向该方块填充无限的指定液体。
                 // dir.getOpposite() 表示从该相邻方块的方向看向本方块。
                 // true 表示执行实际的填充操作。
                 ((IFluidHandler) te).fill(dir.getOpposite(), Infinite_Fluid, true);
@@ -62,11 +62,11 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
 
     /**
      * 抽取流体的方法。
-     * 如果请求抽取的是水，则提供请求的流体量。
+     * 如果请求抽取的是指定液体，则提供请求的流体量。
      * @param from 尝试抽取的流体方向。
      * @param resource 请求抽取的流体信息。
      * @param doDrain 是否执行实际抽取操作。
-     * @return 如果请求的是水，则返回一个包含请求流体量的 FluidStack；否则返回 null。
+     * @return 如果请求的是指定液体，则返回一个包含请求流体量的 FluidStack；否则返回 null。
      */
     @Override
     public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
@@ -103,7 +103,7 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
      * 检查是否可以从指定方向抽取特定流体。
      * @param from 尝试抽取的流体方向。
      * @param fluid 尝试抽取的流体。
-     * @return 如果是水则返回 true，否则返回 false。
+     * @return 如果是指定液体则返回 true，否则返回 false。
      */
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid) {

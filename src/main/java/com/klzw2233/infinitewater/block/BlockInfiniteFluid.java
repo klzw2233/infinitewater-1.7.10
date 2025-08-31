@@ -139,10 +139,18 @@ public class BlockInfiniteFluid extends BlockBase {
 
             // 手动移除 TileEntity 和方块
             world.removeTileEntity(x, y, z);
-            world.setBlockToAir(x, y, z);
+            world.setBlockToAir(x, y, z); // 会调用breakBlock，导致生成了两份掉落物
         }
         // 注意：这里不调用 super.breakBlock(...)，阻止默认掉落
     }
+
+
+    // 去除默认的掉落物
+    @Override
+    public java.util.ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+        return new java.util.ArrayList<>();
+    }
+
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {

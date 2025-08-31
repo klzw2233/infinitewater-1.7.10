@@ -48,6 +48,16 @@ public class ModRecipes {
             'W', Items.cauldron,
             'I', Items.iron_ingot
         );
-        ModLogger.info("[Success] Infinite Water Block recipe (Default Iron Ingot Cauldron)");
+        ModLogger.info("[Success] Infinite Water Block recipe (Default Iron, Ingot Cauldron)");
+
+        // 默认配方 无限液体方块
+        GameRegistry.addRecipe(new ItemStack(ModBlocks.infiniteFluid),
+            "III",
+            "IWI",
+            "III",
+            'W', Items.cauldron,
+            'I', Items.iron_ingot
+        );
+        ModLogger.info("[Success] Infinite Fluid Block recipe (Default Iron, Ingot Cauldron)");
     }
 }

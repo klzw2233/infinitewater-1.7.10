@@ -26,24 +26,34 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
      */
     @Override
     public void updateEntity() {
-        // 客户端不执行任何操作，只在服务器端处理。
+        // 只在服务器端执行
         if (worldObj.isRemote) return;
 
-        // 遍历所有有效的方向（上下左右前后）。
+        // 每 5 tick 执行一次（减少性能压力）
+        // if (worldObj.getTotalWorldTime() % 5 != 0) return;
+
+        // 复用 FluidStack 对象，避免频繁 new
+        FluidStack reusableStack = new FluidStack(outputFluid, 0);
+
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-            // 获取在当前方向上的相邻方块实体。
             TileEntity te = worldObj.getTileEntity(
                 xCoord + dir.offsetX,
                 yCoord + dir.offsetY,
                 zCoord + dir.offsetZ
             );
 
-            // 检查相邻的方块实体是否实现了 IFluidHandler 接口。
             if (te instanceof IFluidHandler) {
-                // 如果是，则向该方块填充无限的指定液体。
-                // dir.getOpposite() 表示从该相邻方块的方向看向本方块。
-                // true 表示执行实际的填充操作。
-                ((IFluidHandler) te).fill(dir.getOpposite(), Infinite_Fluid, true);
+                IFluidHandler handler = (IFluidHandler) te;
+
+                // 模拟填充，获取可接受的量
+                reusableStack.amount = Integer.MAX_VALUE;
+                int canAccept = handler.fill(dir.getOpposite(), reusableStack, false);
+
+                if (canAccept > 0) {
+                    // 限制输出速率
+                    reusableStack.amount = Math.min(canAccept, outputRate);
+                    handler.fill(dir.getOpposite(), reusableStack, true);
+                }
             }
         }
     }

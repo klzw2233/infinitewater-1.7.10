@@ -12,6 +12,7 @@ public class ModTileEntities {
         // 无限水方块对应的方块实体
         GameRegistry.registerTileEntity(TileInfiniteWater.class, ModConstants.underLine(TileInfiniteWater.name));
 
+        // 无限液体方块对应的方块实体
         GameRegistry.registerTileEntity(TileInfiniteFluid.class, ModConstants.underLine(TileInfiniteFluid.name));
     }
 }

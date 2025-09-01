@@ -9,7 +9,7 @@ public class ModConstants {
     /** Mod 基本信息 */
     public static final String MODID   = "infinitewater";      // 注册用 ID
     public static final String NAME    = "Infinite Water Block";     // 模组显示名称
-    public static final String VERSION = "1.3"+"-"+ Tags.VERSION;    // 版本号 + git提交号
+    public static final String VERSION = Tags.VERSION;    // 这是给GitHub release发布时的action看的版本号，本地编译是提交的哈希
 
     public static final int[] rateList = {65536, 262144, 1048576, 4194304, 16777216}; // 速率表
 

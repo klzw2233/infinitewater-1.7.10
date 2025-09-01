@@ -59,14 +59,14 @@ public class BlockInfiniteFluid extends BlockBase {
 
                     /*
                       gergtech6储罐物品 存储液体信息的NBT结构
-                      mFluid: {
+                      gt.tank: {
                         FluidName: "water",
                         Amount: 8000
                       }
                     */
                     // ① 先尝试读取 GT6 储罐物品的 mFluid NBT
-                    if (held.hasTagCompound() && held.getTagCompound().hasKey("mFluid")) {
-                        NBTTagCompound fluidTag = held.getTagCompound().getCompoundTag("mFluid");
+                    if (held.hasTagCompound() && held.getTagCompound().hasKey("gt.tank")) {
+                        NBTTagCompound fluidTag = held.getTagCompound().getCompoundTag("gt.tank");
                         fs = FluidStack.loadFluidStackFromNBT(fluidTag);
                     }
 

@@ -12,7 +12,7 @@ public class ModRecipes {
     public static void register() {
         ModLogger.info("=== [Start] Registering recipe ===");
 
-        if (ModConfig.enableInfiniteWater) {
+        if (ModConfig.enableInfiniteWater) { // 配置文件解锁合成表
             registerInfiniteWaterRecipe();
         } else {
             ModLogger.warn("[Skipped] Infinite Water Block has been disabled in the configuration file");

@@ -55,29 +55,51 @@ public class BlockInfiniteFluid extends BlockBase {
                 ItemStack held = player.getCurrentEquippedItem();
 
                 if (held != null) {
-                    // 手里有物品，尝试设置输出流体
-                    FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(held);
-                    if (fs != null) {
+                    FluidStack fs = null;
+
+                    /*
+                      gergtech6储罐物品 存储液体信息的NBT结构
+                      mFluid: {
+                        FluidName: "water",
+                        Amount: 8000
+                      }
+                    */
+                    // ① 先尝试读取 GT6 储罐物品的 mFluid NBT
+                    if (held.hasTagCompound() && held.getTagCompound().hasKey("mFluid")) {
+                        NBTTagCompound fluidTag = held.getTagCompound().getCompoundTag("mFluid");
+                        fs = FluidStack.loadFluidStackFromNBT(fluidTag);
+                    }
+
+                    // ② 如果不是 GT6 储罐物品，再尝试用标准 Forge 方法识别
+                    if (fs == null) {
+                        fs = FluidContainerRegistry.getFluidForFilledItem(held);
+                    }
+
+                    // ③ 如果成功获取到流体，就设置给方块实体
+                    if (fs != null && fs.getFluid() != null) {
                         tile.setOutputFluid(fs.getFluid());
                         player.addChatMessage(new ChatComponentText(
                             "Output fluid set to: " + fs.getFluid().getLocalizedName(fs)
                         ));
                         return true;
                     }
+
                 } else {
-                    // 空手
+                    // 空手交互
+                    // 玩家蹲下时，循环输出速率
                     if (player.isSneaking()) {
-                        // 潜行空手：循环切换输出速率
                         tile.cycleOutputRate();
                         player.addChatMessage(new ChatComponentText(
                             "Output rate: " + tile.getOutputRate() + " mB/t"
                         ));
                         return true;
-                    } else {
-                        // 普通空手：显示当前流体类型和速率
+                    } else { // 聊天栏输出液体名和速率
+                        Fluid fluid = tile.getOutputFluid();
+                        String fluidName = (fluid != null)
+                            ? fluid.getLocalizedName(new FluidStack(fluid, 1))
+                            : "None";
                         player.addChatMessage(new ChatComponentText(
-                            "Fluid: " + tile.getOutputFluid().getLocalizedName(new FluidStack(tile.getOutputFluid(), 1))
-                                + " | Rate: " + tile.getOutputRate() + " mB/t"
+                            "Fluid: " + fluidName + " | Rate: " + tile.getOutputRate() + " mB/t"
                         ));
                         return true;
                     }

@@ -57,22 +57,37 @@ public class BlockInfiniteFluid extends BlockBase {
                 if (held != null) {
                     FluidStack fs = null;
 
-                    /*
-                      gergtech6储罐物品 存储液体信息的NBT结构
-                      gt.tank: {
-                        FluidName: "water",
-                        Amount: 8000
-                      }
-                    */
-                    // ① 先尝试读取 GT6 储罐物品的 mFluid NBT
+                    // 调试输出物品信息
+                    System.out.println("[DEBUG] Held item: " + held.getDisplayName());
+                    if (held.hasTagCompound()) {
+                        System.out.println("[DEBUG] Full NBT: " + held.getTagCompound());
+                    } else {
+                        System.out.println("[DEBUG] No NBT found on held item.");
+                    }
+
+                    // ① 读取 GT6 储罐 NBT
                     if (held.hasTagCompound() && held.getTagCompound().hasKey("gt.tank")) {
-                        NBTTagCompound fluidTag = held.getTagCompound().getCompoundTag("gt.tank");
-                        fs = FluidStack.loadFluidStackFromNBT(fluidTag);
+                        NBTTagCompound tankTag = held.getTagCompound().getCompoundTag("gt.tank");
+                        System.out.println("[DEBUG] Found gt.tank tag: " + tankTag);
+                        fs = FluidStack.loadFluidStackFromNBT(tankTag);
+
+                        if (fs != null) {
+                            System.out.println("[DEBUG] Parsed fluid: " + fs.getFluid().getName() +
+                                ", amount: " + fs.amount + " mB");
+                        } else {
+                            System.out.println("[DEBUG] gt.tank tag exists but could not parse FluidStack.");
+                        }
                     }
 
                     // ② 如果不是 GT6 储罐物品，再尝试用标准 Forge 方法识别
                     if (fs == null) {
                         fs = FluidContainerRegistry.getFluidForFilledItem(held);
+                        if (fs != null) {
+                            System.out.println("[DEBUG] Detected standard fluid container: " +
+                                fs.getFluid().getName() + ", amount: " + fs.amount + " mB");
+                        } else {
+                            System.out.println("[DEBUG] No fluid detected from standard container check.");
+                        }
                     }
 
                     // ③ 如果成功获取到流体，就设置给方块实体
@@ -86,14 +101,13 @@ public class BlockInfiniteFluid extends BlockBase {
 
                 } else {
                     // 空手交互
-                    // 玩家蹲下时，循环输出速率
                     if (player.isSneaking()) {
                         tile.cycleOutputRate();
                         player.addChatMessage(new ChatComponentText(
                             "Output rate: " + tile.getOutputRate() + " mB/t"
                         ));
                         return true;
-                    } else { // 聊天栏输出液体名和速率
+                    } else {
                         Fluid fluid = tile.getOutputFluid();
                         String fluidName = (fluid != null)
                             ? fluid.getLocalizedName(new FluidStack(fluid, 1))
@@ -108,6 +122,7 @@ public class BlockInfiniteFluid extends BlockBase {
         }
         return true;
     }
+
 
 
 

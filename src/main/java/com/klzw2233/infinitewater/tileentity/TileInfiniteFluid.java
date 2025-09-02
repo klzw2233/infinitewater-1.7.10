@@ -27,10 +27,10 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
     @Override
     public void updateEntity() {
         // 只在服务器端执行
-        // if (worldObj.isRemote) return;
+        if (worldObj.isRemote) return;
 
-        // 每 5 tick 执行一次（减少性能压力）
-        // if (worldObj.getTotalWorldTime() % 5 != 0) return;
+        // 每 20 tick 执行一次（减少性能压力）
+        if (worldObj.getTotalWorldTime() % 20 != 0) return;
 
         // 复用 FluidStack 对象，避免频繁 new
         FluidStack reusableStack = new FluidStack(outputFluid, 0);

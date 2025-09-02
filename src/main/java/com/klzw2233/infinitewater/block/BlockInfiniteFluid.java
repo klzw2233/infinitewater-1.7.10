@@ -119,45 +119,6 @@ public class BlockInfiniteFluid extends BlockBase {
         return new TileInfiniteFluid();
     }
 
-
-    @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(x, y, z);
-            if (te instanceof TileInfiniteFluid) {
-                TileInfiniteFluid tile = (TileInfiniteFluid) te;
-
-                // 让 TileEntity 有机会清理资源
-                tile.onBlockBroken();
-
-                // 创建方块物品
-                Item item = Item.getItemFromBlock(this);
-                if (item != null) {
-                    ItemStack stack = new ItemStack(item);
-
-                    // 写入自定义 NBT
-                    NBTTagCompound tag = new NBTTagCompound();
-                    tile.writeCustomNBT(tag);
-                    stack.setTagCompound(tag);
-
-                    // 掉落物品到世界
-                    EntityItem entityItem = new EntityItem(
-                        world,
-                        x + 0.5, y + 0.5, z + 0.5,
-                        stack
-                    );
-                    world.spawnEntityInWorld(entityItem);
-                }
-            }
-
-            // 手动移除 TileEntity 和方块
-            world.removeTileEntity(x, y, z);
-            world.setBlockToAir(x, y, z); // 会调用breakBlock，导致生成了两份掉落物
-        }
-        // 注意：这里不调用 super.breakBlock(...)，阻止默认掉落
-    }
-
-
     // 去除默认的掉落物
     @Override
     public java.util.ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
@@ -166,15 +127,29 @@ public class BlockInfiniteFluid extends BlockBase {
 
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(x, y, z);
-            if (te instanceof TileInfiniteFluid && stack.hasTagCompound()) {
-                NBTTagCompound tag = stack.getTagCompound();
-                ((TileInfiniteFluid) te).readCustomNBT(tag); // 从物品 NBT 恢复数据
+            if (te instanceof TileInfiniteFluid) {
+                ItemStack stack = new ItemStack(this);
+                NBTTagCompound tag = new NBTTagCompound();
+                ((TileInfiniteFluid) te).writeCustomNBT(tag);
+                stack.setTagCompound(tag);
+                EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack);
+                world.spawnEntityInWorld(entityItem);
             }
         }
-        super.onBlockPlacedBy(world, x, y, z, placer, stack);
+        super.breakBlock(world, x, y, z, block, meta);
     }
 
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(world, x, y, z, placer, stack);
+        if (!world.isRemote && stack.hasTagCompound()) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if (te instanceof TileInfiniteFluid) {
+                ((TileInfiniteFluid) te).readCustomNBT(stack.getTagCompound());
+            }
+        }
+    }
 }

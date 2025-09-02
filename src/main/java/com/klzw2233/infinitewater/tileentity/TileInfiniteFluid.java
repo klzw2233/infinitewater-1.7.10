@@ -27,35 +27,23 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
     @Override
     public void updateEntity() {
         // 只在服务器端执行
-        // if (worldObj.isRemote) return;
+        if (worldObj.isRemote) return;
 
-        // 每 5 tick 执行一次（减少性能压力）
-        // if (worldObj.getTotalWorldTime() % 5 != 0) return;
+        // 每 20 tick 执行一次（减少性能压力）
+        // if (worldObj.getTotalWorldTime() % 20 != 0) return;
 
-        // 复用 FluidStack 对象，避免频繁 new
-        FluidStack reusableStack = new FluidStack(outputFluid, 0);
-
-        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-            TileEntity te = worldObj.getTileEntity(
-                xCoord + dir.offsetX,
-                yCoord + dir.offsetY,
-                zCoord + dir.offsetZ
-            );
-
-            if (te instanceof IFluidHandler) {
-                IFluidHandler handler = (IFluidHandler) te;
-
-                // 模拟填充，获取可接受的量
-                reusableStack.amount = Integer.MAX_VALUE;
-                int canAccept = handler.fill(dir.getOpposite(), reusableStack, false);
-
-                if (canAccept > 0) {
-                    // 限制输出速率
-                    reusableStack.amount = Math.min(canAccept, outputRate);
-                    handler.fill(dir.getOpposite(), reusableStack, true);
+        for(ForgeDirection side : ForgeDirection.values()) {
+            TileEntity tile = this.worldObj.getTileEntity(this.xCoord + side.offsetX, this.yCoord + side.offsetY, this.zCoord + side.offsetZ);
+            if(tile != null && tile instanceof IFluidHandler) {
+                int mAmount = ((IFluidHandler)tile).fill(side.getOpposite(), Infinite_Fluid, false);
+                if(mAmount != 0) {
+                    Infinite_Fluid.amount = mAmount;
+                    ((IFluidHandler)tile).fill(side.getOpposite(), Infinite_Fluid, true);
                 }
             }
         }
+
+        Infinite_Fluid.amount = outputRate;
     }
 
     /**
@@ -138,34 +126,43 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setString("OutputFluid", outputFluid.getName());
+        if (Infinite_Fluid != null) {
+            NBTTagCompound fluidTag = new NBTTagCompound();
+            Infinite_Fluid.writeToNBT(fluidTag);
+            tag.setTag("InfiniteFluidStack", fluidTag);
+        }
         tag.setInteger("OutputRate", outputRate);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if (tag.hasKey("OutputFluid")) {
-            Fluid f = FluidRegistry.getFluid(tag.getString("OutputFluid"));
-            if (f != null){
-                outputFluid = f;
+        if (tag.hasKey("InfiniteFluidStack")) {
+            FluidStack fs = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("InfiniteFluidStack"));
+            if (fs != null && fs.getFluid() != null) {
+                Infinite_Fluid = fs;
+                outputFluid = fs.getFluid();
             }
+        } else {
+            // 兼容旧存档
+            if (tag.hasKey("OutputFluid")) {
+                Fluid f = FluidRegistry.getFluid(tag.getString("OutputFluid"));
+                if (f != null) outputFluid = f;
+            }
+            if (tag.hasKey("OutputRate")) {
+                outputRate = tag.getInteger("OutputRate");
+            }
+            Infinite_Fluid = new FluidStack(outputFluid, outputRate);
         }
-        if (tag.hasKey("OutputRate")) {
-            outputRate = tag.getInteger("OutputRate");
-        }
-
-        Infinite_Fluid = new FluidStack(outputFluid, outputRate); // 同步更新
     }
 
-    /**
-     * set output fluid type
-    */
-    public void setOutputFluid(Fluid fluid){
-
+    public void setOutputFluid(Fluid fluid) {
         outputFluid = fluid;
-
-        Infinite_Fluid = new FluidStack(outputFluid, outputRate); // 同步更新
+        Infinite_Fluid = new FluidStack(outputFluid, outputRate);
+        markDirty();
+        if (worldObj != null) {
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
     }
 
     /**
@@ -194,12 +191,27 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
         markDirty(); // 通知保存
     }
 
-    public void writeCustomNBT(NBTTagCompound nbt) {
-        this.writeToNBT(nbt);
+    public void writeCustomNBT(NBTTagCompound tag) {
+        if (Infinite_Fluid != null) {
+            NBTTagCompound fluidTag = new NBTTagCompound();
+            Infinite_Fluid.writeToNBT(fluidTag);
+            tag.setTag("InfiniteFluidStack", fluidTag);
+        }
+        tag.setInteger("OutputRate", outputRate);
     }
 
-    public void readCustomNBT(NBTTagCompound nbt) {
-        this.readFromNBT(nbt);
+    public void readCustomNBT(NBTTagCompound tag) {
+        if (tag.hasKey("InfiniteFluidStack")) {
+            FluidStack fs = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("InfiniteFluidStack"));
+            if (fs != null && fs.getFluid() != null) {
+                Infinite_Fluid = fs;
+                outputFluid = fs.getFluid();
+                outputRate = fs.amount;
+            }
+        }
+        if (tag.hasKey("OutputRate")) {
+            outputRate = tag.getInteger("OutputRate");
+        }
     }
 
 }

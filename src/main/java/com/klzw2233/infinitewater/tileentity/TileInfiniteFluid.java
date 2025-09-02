@@ -32,30 +32,18 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
         // 每 20 tick 执行一次（减少性能压力）
         // if (worldObj.getTotalWorldTime() % 20 != 0) return;
 
-        // 复用 FluidStack 对象，避免频繁 new
-        FluidStack reusableStack = new FluidStack(outputFluid, 0);
-
-        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-            TileEntity te = worldObj.getTileEntity(
-                xCoord + dir.offsetX,
-                yCoord + dir.offsetY,
-                zCoord + dir.offsetZ
-            );
-
-            if (te instanceof IFluidHandler) {
-                IFluidHandler handler = (IFluidHandler) te;
-
-                // 模拟填充，获取可接受的量
-                reusableStack.amount = Integer.MAX_VALUE;
-                int canAccept = handler.fill(dir.getOpposite(), reusableStack, false);
-
-                if (canAccept != 0) {
-                    // 限制输出速率
-                    reusableStack.amount = outputRate;
-                    handler.fill(dir.getOpposite(), reusableStack, true);
+        for(ForgeDirection side : ForgeDirection.values()) {
+            TileEntity tile = this.worldObj.getTileEntity(this.xCoord + side.offsetX, this.yCoord + side.offsetY, this.zCoord + side.offsetZ);
+            if(tile != null && tile instanceof IFluidHandler) {
+                int mAmount = ((IFluidHandler)tile).fill(side.getOpposite(), Infinite_Fluid, false);
+                if(mAmount != 0) {
+                    Infinite_Fluid.amount = mAmount;
+                    ((IFluidHandler)tile).fill(side.getOpposite(), Infinite_Fluid, true);
                 }
             }
         }
+
+        Infinite_Fluid.amount = outputRate;
     }
 
     /**

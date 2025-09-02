@@ -191,12 +191,27 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
         markDirty(); // 通知保存
     }
 
-    public void writeCustomNBT(NBTTagCompound nbt) {
-        this.writeToNBT(nbt);
+    public void writeCustomNBT(NBTTagCompound tag) {
+        if (Infinite_Fluid != null) {
+            NBTTagCompound fluidTag = new NBTTagCompound();
+            Infinite_Fluid.writeToNBT(fluidTag);
+            tag.setTag("InfiniteFluidStack", fluidTag);
+        }
+        tag.setInteger("OutputRate", outputRate);
     }
 
-    public void readCustomNBT(NBTTagCompound nbt) {
-        this.readFromNBT(nbt);
+    public void readCustomNBT(NBTTagCompound tag) {
+        if (tag.hasKey("InfiniteFluidStack")) {
+            FluidStack fs = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("InfiniteFluidStack"));
+            if (fs != null && fs.getFluid() != null) {
+                Infinite_Fluid = fs;
+                outputFluid = fs.getFluid();
+                outputRate = fs.amount;
+            }
+        }
+        if (tag.hasKey("OutputRate")) {
+            outputRate = tag.getInteger("OutputRate");
+        }
     }
 
 }

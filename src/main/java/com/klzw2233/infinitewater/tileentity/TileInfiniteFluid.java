@@ -126,16 +126,24 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setString("OutputFluid", outputFluid.getName());
+        if (outputFluid != null) {
+            tag.setString("OutputFluid", outputFluid.getName());
+        }
         tag.setInteger("OutputRate", outputRate);
+
+        // 保存当前 Infinite_Fluid 的 NBT（包括类型、数量、附加数据）
+        NBTTagCompound fluidTag = new NBTTagCompound();
+        Infinite_Fluid.writeToNBT(fluidTag);
+        tag.setTag("InfiniteFluidStack", fluidTag);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+
         if (tag.hasKey("OutputFluid")) {
             Fluid f = FluidRegistry.getFluid(tag.getString("OutputFluid"));
-            if (f != null){
+            if (f != null) {
                 outputFluid = f;
             }
         }
@@ -143,17 +151,27 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
             outputRate = tag.getInteger("OutputRate");
         }
 
-        Infinite_Fluid = new FluidStack(outputFluid, outputRate); // 同步更新
+        // 读取 Infinite_Fluid
+        if (tag.hasKey("InfiniteFluidStack")) {
+            FluidStack fs = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("InfiniteFluidStack"));
+            if (fs != null) {
+                Infinite_Fluid = fs;
+                outputFluid = fs.getFluid(); // 确保同步
+            } else {
+                Infinite_Fluid = new FluidStack(outputFluid, outputRate);
+            }
+        } else {
+            Infinite_Fluid = new FluidStack(outputFluid, outputRate);
+        }
     }
 
-    /**
-     * set output fluid type
-    */
-    public void setOutputFluid(Fluid fluid){
-
+    public void setOutputFluid(Fluid fluid) {
         outputFluid = fluid;
-
-        Infinite_Fluid = new FluidStack(outputFluid, outputRate); // 同步更新
+        Infinite_Fluid = new FluidStack(outputFluid, outputRate);
+        markDirty();
+        if (worldObj != null) {
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
     }
 
     /**

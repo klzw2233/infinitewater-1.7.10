@@ -131,13 +131,10 @@ public class BlockInfiniteFluid extends BlockBase {
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(x, y, z);
             if (te instanceof TileInfiniteFluid) {
-                TileInfiniteFluid tile = (TileInfiniteFluid) te;
-
                 ItemStack stack = new ItemStack(this);
                 NBTTagCompound tag = new NBTTagCompound();
-                tile.writeToNBT(tag); // 保存完整 TileEntity 数据
+                ((TileInfiniteFluid) te).writeToNBT(tag);
                 stack.setTagCompound(tag);
-
                 EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack);
                 world.spawnEntityInWorld(entityItem);
             }

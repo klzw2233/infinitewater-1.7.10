@@ -24,32 +24,18 @@ public class ItemBlockInfiniteFluid extends ItemBlock {
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean advanced) {
         if (stack.hasTagCompound()) {
             NBTTagCompound tag = stack.getTagCompound();
-
-            // 先尝试读取完整的 Infinite_Fluid NBT
             if (tag.hasKey("InfiniteFluidStack")) {
                 FluidStack fs = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("InfiniteFluidStack"));
                 if (fs != null && fs.getFluid() != null) {
-                    list.add(EnumChatFormatting.YELLOW + "流体类型: "
-                        + EnumChatFormatting.WHITE + fs.getFluid().getLocalizedName(fs));
-                    list.add(EnumChatFormatting.AQUA + "保存量: "
-                        + EnumChatFormatting.WHITE + fs.amount + " mB");
-                } else {
-                    list.add(EnumChatFormatting.GRAY + "流体类型: 无");
+                    list.add(EnumChatFormatting.YELLOW + "流体类型: " + EnumChatFormatting.WHITE + fs.getFluid().getLocalizedName(fs));
+                    list.add(EnumChatFormatting.GREEN + "保存量: " + EnumChatFormatting.WHITE + fs.amount + " mB");
                 }
-            } else if (tag.hasKey("OutputFluid")) {
-                // 兼容旧版本 NBT
-                String fluidName = tag.getString("OutputFluid");
-                list.add(EnumChatFormatting.YELLOW + "流体类型: " + EnumChatFormatting.WHITE + fluidName);
             }
-
-            // 输出速率
             if (tag.hasKey("OutputRate")) {
                 int rate = tag.getInteger("OutputRate");
-                list.add(EnumChatFormatting.GREEN + "输出速率: "
-                    + EnumChatFormatting.WHITE + rate + " mB/t");
+                list.add(EnumChatFormatting.AQUA + "输出速率: " + EnumChatFormatting.WHITE + rate + " mB/t");
             }
         } else {
-            // 没有 NBT 时的默认提示
             list.add(EnumChatFormatting.GRAY + "未设置流体类型");
             list.add(EnumChatFormatting.GRAY + "默认输出速率");
         }

@@ -30,7 +30,7 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
         if (worldObj.isRemote) return;
 
         // 每 20 tick 执行一次（减少性能压力）
-        if (worldObj.getTotalWorldTime() % 20 != 0) return;
+        // if (worldObj.getTotalWorldTime() % 20 != 0) return;
 
         // 复用 FluidStack 对象，避免频繁 new
         FluidStack reusableStack = new FluidStack(outputFluid, 0);
@@ -49,9 +49,9 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
                 reusableStack.amount = Integer.MAX_VALUE;
                 int canAccept = handler.fill(dir.getOpposite(), reusableStack, false);
 
-                if (canAccept > 0) {
+                if (canAccept != 0) {
                     // 限制输出速率
-                    reusableStack.amount = Math.min(canAccept, outputRate);
+                    reusableStack.amount = outputRate;
                     handler.fill(dir.getOpposite(), reusableStack, true);
                 }
             }

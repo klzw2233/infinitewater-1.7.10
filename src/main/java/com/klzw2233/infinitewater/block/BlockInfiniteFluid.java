@@ -63,6 +63,12 @@ public class BlockInfiniteFluid extends BlockBase {
                         fs = FluidStack.loadFluidStackFromNBT(tankTag);
                     }
 
+                    // 新增：读取  IC2 通用流体单元 NBT
+                    if (fs == null && held.hasTagCompound() && held.getTagCompound().hasKey("Fluid")) {
+                        NBTTagCompound fluidTag = held.getTagCompound().getCompoundTag("Fluid");
+                        fs = FluidStack.loadFluidStackFromNBT(fluidTag);
+                    }
+
                     // ② 如果不是 GT6 储罐物品，再尝试用标准 Forge 方法识别
                     if (fs == null) {
                         fs = FluidContainerRegistry.getFluidForFilledItem(held);

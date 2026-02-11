@@ -132,28 +132,33 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
             tag.setTag("InfiniteFluidStack", fluidTag);
         }
         tag.setInteger("OutputRate", outputRate);
+        tag.setString("OutputFluidName", outputFluid.getName()); // 存储流体名称确保正确性
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        if (tag.hasKey("OutputFluidName")) {
+            // 使用存储的流体名称来获取流体
+            Fluid f = FluidRegistry.getFluid(tag.getString("OutputFluidName"));
+            if (f != null) outputFluid = f;
+        }
+        
         if (tag.hasKey("InfiniteFluidStack")) {
             FluidStack fs = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("InfiniteFluidStack"));
             if (fs != null && fs.getFluid() != null) {
                 Infinite_Fluid = fs;
                 outputFluid = fs.getFluid();
+                outputRate = fs.amount; // 从流体堆栈中读取输出速率
             }
-        } else {
-            // 兼容旧存档
-            if (tag.hasKey("OutputFluid")) {
-                Fluid f = FluidRegistry.getFluid(tag.getString("OutputFluid"));
-                if (f != null) outputFluid = f;
-            }
-            if (tag.hasKey("OutputRate")) {
-                outputRate = tag.getInteger("OutputRate");
-            }
-            Infinite_Fluid = new FluidStack(outputFluid, outputRate);
         }
+        
+        if (tag.hasKey("OutputRate")) {
+            outputRate = tag.getInteger("OutputRate");
+        }
+        
+        // 确保Infinite_Fluid与当前设置匹配
+        Infinite_Fluid = new FluidStack(outputFluid, outputRate);
     }
 
     public void setOutputFluid(Fluid fluid) {

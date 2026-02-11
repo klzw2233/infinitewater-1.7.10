@@ -1,0 +1,19 @@
+package com.derongan.minecraft.infinitewater.util;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.World;
+
+public class ChatUtils {
+    public static void sendChatMessage(EntityPlayer player, String message) {
+        if (player != null && player.worldObj != null && !player.worldObj.isRemote) {
+            player.addChatMessage(new TextComponentString(message));
+        }
+    }
+
+    public static void sendTranslatedChatMessage(EntityPlayer player, String translationKey, Object... args) {
+        if (player != null && player.worldObj != null && !player.worldObj.isRemote) {
+            player.addChatMessage(new TextComponentString(String.format(translationKey, args)));
+        }
+    }
+}

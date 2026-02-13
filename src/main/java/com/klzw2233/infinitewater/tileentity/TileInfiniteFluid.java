@@ -142,6 +142,9 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
             if (fs != null && fs.getFluid() != null) {
                 Infinite_Fluid = fs;
                 outputFluid = fs.getFluid();
+                // 关键：把 FluidStack 的 amount 恢复到 outputRate，并同步 Infinite_Fluid.amount
+                outputRate = fs.amount;
+                Infinite_Fluid.amount = outputRate;
             }
         } else {
             // 兼容旧存档
@@ -153,6 +156,12 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
                 outputRate = tag.getInteger("OutputRate");
             }
             Infinite_Fluid = new FluidStack(outputFluid, outputRate);
+        }
+
+        // 额外保险：如果 NBT 同时包含 OutputRate（写入了两个字段），优先使用 OutputRate 字段（可选）
+        if (tag.hasKey("OutputRate")) {
+            outputRate = tag.getInteger("OutputRate");
+            if (Infinite_Fluid != null) Infinite_Fluid.amount = outputRate;
         }
     }
 
@@ -189,6 +198,9 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
         outputRate = ModConstants.rateList[(idx + 1) % ModConstants.rateList.length];
         Infinite_Fluid = new FluidStack(outputFluid, outputRate); // 同步更新
         markDirty(); // 通知保存
+        if (worldObj != null && !worldObj.isRemote) {
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // 强制同步到客户端
+        }
     }
 
     public void writeCustomNBT(NBTTagCompound tag) {

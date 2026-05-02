@@ -29,21 +29,17 @@ public class TileInfiniteFluid extends TileBase implements IFluidHandler{
         // 只在服务器端执行
         if (worldObj.isRemote) return;
 
-        // 每 20 tick 执行一次（减少性能压力）
-        // if (worldObj.getTotalWorldTime() % 20 != 0) return;
-
         for(ForgeDirection side : ForgeDirection.values()) {
             TileEntity tile = this.worldObj.getTileEntity(this.xCoord + side.offsetX, this.yCoord + side.offsetY, this.zCoord + side.offsetZ);
             if(tile != null && tile instanceof IFluidHandler) {
-                int mAmount = ((IFluidHandler)tile).fill(side.getOpposite(), Infinite_Fluid, false);
+                FluidStack toSend = new FluidStack(outputFluid, outputRate);
+                int mAmount = ((IFluidHandler)tile).fill(side.getOpposite(), toSend, false);
                 if(mAmount != 0) {
-                    Infinite_Fluid.amount = mAmount;
-                    ((IFluidHandler)tile).fill(side.getOpposite(), Infinite_Fluid, true);
+                    toSend.amount = mAmount;
+                    ((IFluidHandler)tile).fill(side.getOpposite(), toSend, true);
                 }
             }
         }
-
-        Infinite_Fluid.amount = outputRate;
     }
 
     /**

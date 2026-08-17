@@ -68,6 +68,12 @@ public class BlockInfiniteFluid extends BlockBase {
                         NBTTagCompound fluidTag = held.getTagCompound().getCompoundTag("Fluid");
                         fs = FluidStack.loadFluidStackFromNBT(fluidTag);
                     }
+					
+					// 新增 读取 OpenBlock 蓄水槽
+					if (fs == null && held.hasTagCompound() && held.getTagCompound().hasKey("tank")) {
+                        NBTTagCompound fluidTag = held.getTagCompound().getCompoundTag("tank");
+                        fs = FluidStack.loadFluidStackFromNBT(fluidTag);
+                    }
 
                     // ② 如果不是 GT6 储罐物品，再尝试用标准 Forge 方法识别
                     if (fs == null) {

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "infinite_water",
+  "pattern": [
+    "III",
+    "IBI",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/copper"
+    },
+    "B": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "infinitewater:infinite_water_block",
+    "count": 1
+  }
+}

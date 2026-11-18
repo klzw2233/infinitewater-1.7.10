@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "infinitewater:infinite_water_block",
+    "infinitewater:infinite_liquid_block"
+  ]
+}

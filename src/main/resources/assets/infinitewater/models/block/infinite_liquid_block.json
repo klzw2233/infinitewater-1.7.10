@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "infinitewater:block/infinite_liquid_block"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "tab.infinitewater" : "无限水方块",
+  "block.infinitewater.infinite_water_block": "无限水方块",
+  "block.infinitewater.infinite_liquid_block": "无限液体方块",
+  "message.infinitewater.rate_set": "输出速率已设为 %s mB/tick",
+  "message.infinitewater.container_empty": "容器内没有液体，无法设置输出液体",
+  "message.infinitewater.fluid_set": "输出液体已设为 %s",
+  "message.infinitewater.status_report": "%s：当前输出液体为 %s，速率 %s mB/tick",
+  "message.infinitewater.no_fluid": "未设置"
+}

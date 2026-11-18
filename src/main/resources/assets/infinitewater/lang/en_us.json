@@ -1,0 +1,10 @@
+{
+  "tab.infinitewater" : "Infinite water block",
+  "block.infinitewater.infinite_water_block": "Infinite water block",
+  "block.infinitewater.infinite_liquid_block": "Infinite liquid block",
+  "message.infinitewater.rate_set": "Output rate set to %s mB/tick",
+  "message.infinitewater.container_empty": "The container holds no fluid; output fluid unchanged",
+  "message.infinitewater.fluid_set": "Output fluid set to %s",
+  "message.infinitewater.status_report": "%s: current output is %s at %s mB/tick",
+  "message.infinitewater.no_fluid": "unset"
+}

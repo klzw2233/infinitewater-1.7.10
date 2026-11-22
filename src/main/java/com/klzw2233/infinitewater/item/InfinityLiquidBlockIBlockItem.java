@@ -26,36 +26,39 @@ public class InfinityLiquidBlockIBlockItem extends BlockItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level,
                                 List<Component> tooltip, TooltipFlag flag) {
-        CompoundTag nbt = stack.getTag();
-        if (nbt != null && nbt.contains("StoredFluid") && nbt.contains("RateIndex")) {
+        CompoundTag itemTag = stack.getTag();
+        if (itemTag != null && itemTag.contains("BlockEntityTag")) {
+            CompoundTag beTag = itemTag.getCompound("BlockEntityTag");
 
-            // ---- 1. 读取 NBT ----
-            FluidStack storedFluid = FluidStack.loadFluidStackFromNBT(nbt.getCompound("StoredFluid"));
+            if (beTag.contains("StoredFluid") && beTag.contains("RateIndex")) {
 
-            int[] presets = InfiniteLiquidBlockBlockEntity.RATE_PRESETS;
-            int rateIndex = Mth.clamp(nbt.getInt("RateIndex"), 0, presets.length - 1);
-            int rate = presets[rateIndex];
+                // ---- 1. 读取 NBT ----
+                FluidStack storedFluid = FluidStack.loadFluidStackFromNBT(beTag.getCompound("StoredFluid"));
 
-            // ---- 2. 流体种类行 ----
-            // 用流体自身的本地化名称；若为空则显示“空”的翻译键
-            Component fluidName = storedFluid.isEmpty()
-                    ? Component.translatable("tooltip.infinitewater.infinity_liquid.empty")
-                    .withStyle(ChatFormatting.GRAY)
-                    : storedFluid.getDisplayName().copy()
-                    .withStyle(ChatFormatting.AQUA);
+                int[] presets = InfiniteLiquidBlockBlockEntity.RATE_PRESETS;
+                int rateIndex = Mth.clamp(beTag.getInt("RateIndex"), 0, presets.length - 1);
+                int rate = presets[rateIndex];
 
-            MutableComponent fluidLine = Component.translatable(
-                    "tooltip.infinitewater.infinity_liquid.fluid",
-                    fluidName
-            );
-            tooltip.add(fluidLine);
+                // ---- 2. 流体种类行 ----
+                Component fluidName = storedFluid.isEmpty()
+                        ? Component.translatable("tooltip.infinitewater.infinity_liquid.empty")
+                        .withStyle(ChatFormatting.GRAY)
+                        : storedFluid.getDisplayName().copy()
+                        .withStyle(ChatFormatting.AQUA);
 
-            // ---- 3. 输出速率行 ----
-            MutableComponent rateLine = Component.translatable(
-                    "tooltip.infinitewater.infinity_liquid.rate",
-                    Component.literal(String.valueOf(rate)).withStyle(ChatFormatting.YELLOW)
-            );
-            tooltip.add(rateLine);
+                MutableComponent fluidLine = Component.translatable(
+                        "tooltip.infinitewater.infinity_liquid.fluid",
+                        fluidName
+                );
+                tooltip.add(fluidLine);
+
+                // ---- 3. 输出速率行 ----
+                MutableComponent rateLine = Component.translatable(
+                        "tooltip.infinitewater.infinity_liquid.rate",
+                        Component.literal(String.valueOf(rate)).withStyle(ChatFormatting.YELLOW)
+                );
+                tooltip.add(rateLine);
+            }
         }
 
         super.appendHoverText(stack, level, tooltip, flag);

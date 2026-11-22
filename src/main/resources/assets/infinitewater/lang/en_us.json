@@ -6,5 +6,8 @@
   "message.infinitewater.container_empty": "The container holds no fluid; output fluid unchanged",
   "message.infinitewater.fluid_set": "Output fluid set to %s",
   "message.infinitewater.status_report": "%s: current output is %s at %s mB/tick",
-  "message.infinitewater.no_fluid": "unset"
+  "message.infinitewater.no_fluid": "unset",
+  "tooltip.infinitewater.infinity_liquid.fluid": "Fluid: %s",
+  "tooltip.infinitewater.infinity_liquid.rate": "Output Rate: %s mB/tick",
+  "tooltip.infinitewater.infinity_liquid.empty": "Empty"
 }

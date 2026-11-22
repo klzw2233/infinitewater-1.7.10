@@ -1,6 +1,7 @@
 package com.klzw2233.infinitewater.init;
 
 import com.klzw2233.infinitewater.InfiniteWater;
+import com.klzw2233.infinitewater.item.InfinityLiquidBlockIBlockItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,9 +28,11 @@ public class ModItems {
                 ModBlocks.INFINITE_WATER_BLOCK.get(),
                 new Item.Properties()));
 
+    // 无限液体方块：使用自定义 BlockItem 子类，
+    // 以便在物品栏中显示流体类型与输出速率的本地化 Tooltip。
     public static final RegistryObject<Item> INFINITE_LIQUID_BLOCK =
             ITEMS.register("infinite_liquid_block",
-                    () -> new BlockItem(
+                    () -> new InfinityLiquidBlockIBlockItem(
                             ModBlocks.INFINITE_LIQUID_BLOCK.get(),
                             new Item.Properties()));
 }

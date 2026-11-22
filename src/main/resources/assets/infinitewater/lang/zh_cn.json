@@ -6,5 +6,8 @@
   "message.infinitewater.container_empty": "容器内没有液体，无法设置输出液体",
   "message.infinitewater.fluid_set": "输出液体已设为 %s",
   "message.infinitewater.status_report": "%s：当前输出液体为 %s，速率 %s mB/tick",
-  "message.infinitewater.no_fluid": "未设置"
+  "message.infinitewater.no_fluid": "未设置",
+  "tooltip.infinitewater.infinity_liquid.fluid": "流体类型: %s",
+  "tooltip.infinitewater.infinity_liquid.rate": "输出速率: %s mB/tick",
+  "tooltip.infinitewater.infinity_liquid.empty": "空"
 }
